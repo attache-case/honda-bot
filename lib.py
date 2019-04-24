@@ -2,6 +2,7 @@ import discord
 import env
 
 import textwrap
+import random
 
 async def respond_greeting(message):
     if message.content.startswith("おはよう"):
@@ -37,6 +38,25 @@ async def respond_rps(client, message):
         await message.channel.send(m)
     else:
         assert [r, p, s].count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
+
+        rnd = random.random()
+
+        # WIN
+
+        if rnd < env.WIN_RATE:
+            f = [
+                discord.File("honda_win.png")
+            ]
+            m = textwrap.dedent("""\
+                やるやん。
+                明日は俺にリベンジさせて。
+                では、どうぞ。
+            """)
+            await message.channel.send(m, files=f)
+            return
+
+        # LOSE
+
         # voice = await client.join_voice_channel(client.get_channel(DISCORD_VOICE_CH_ID))
         if r is True:
             # m = "https://youtu.be/LhPJcvJLNEA"
