@@ -37,7 +37,7 @@ async def respond_rps(client, message):
         await message.channel.send(m)
     else:
         assert [r, p, s].count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
-        voice = await client.join_voice_channel(client.get_channel(DISCORD_VOICE_CH_ID))
+        # voice = await client.join_voice_channel(client.get_channel(DISCORD_VOICE_CH_ID))
         if r is True:
             # m = "https://youtu.be/LhPJcvJLNEA"
             f = [
@@ -51,7 +51,7 @@ async def respond_rps(client, message):
                 ほな、いただきます！
             """)
             await message.channel.send(m, files=f)
-            await play_youtube(voice, "https://youtu.be/LhPJcvJLNEA")
+            # await play_youtube(voice, "https://youtu.be/LhPJcvJLNEA")
         elif s is True:
             # m = "https://youtu.be/SWNCYpeDTfo"
             f = [
@@ -65,7 +65,7 @@ async def respond_rps(client, message):
                 ほな、いただきます！
             """)
             await message.channel.send(m, files=f)
-            await play_youtube(voice, "https://youtu.be/SWNCYpeDTfo")
+            # await play_youtube(voice, "https://youtu.be/SWNCYpeDTfo")
         if p is True:
             # m = "https://youtu.be/28d78XP1TJs"
             f = [
@@ -79,4 +79,4 @@ async def respond_rps(client, message):
                 ほな、いただきます！
             """)
             await message.channel.send(m, files=f)
-            await play_youtube(voice, "https://youtu.be/28d78XP1TJs")
+            # await play_youtube(voice, "https://youtu.be/28d78XP1TJs")
