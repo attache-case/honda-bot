@@ -22,6 +22,10 @@ def parse_hands(message):
     s = key_parser(message, env.HAND_S_KEYWORDS)
     return r, p, s
 
+async def play_youtube(voice, url):
+    player = await voice.create_ytdl_player(url)
+    player.start()
+
 async def respond_rps(message):
     r, p, s = parse_hands(message)
     if [r, p, s].count(True) == 0:
@@ -33,6 +37,7 @@ async def respond_rps(message):
         await message.channel.send(m)
     else:
         assert [r, p, s].count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
+        voice = await client.join_voice_channel(client.get_channel(DISCORD_VOICE_CH_ID))
         if r is True:
             # m = "https://youtu.be/LhPJcvJLNEA"
             f = discord.File("honda_p.png")
@@ -43,6 +48,7 @@ async def respond_rps(message):
                 ほな、いただきます！
             """)
             await message.channel.send(m, file=f)
+            await play_youtube(voice, "https://youtu.be/LhPJcvJLNEA")
         elif s is True:
             # m = "https://youtu.be/SWNCYpeDTfo"
             f = discord.File("honda_r.png")
@@ -53,6 +59,7 @@ async def respond_rps(message):
                 ほな、いただきます！
             """)
             await message.channel.send(m, file=f)
+            await play_youtube(voice, "https://youtu.be/SWNCYpeDTfo")
         if p is True:
             # m = "https://youtu.be/28d78XP1TJs"
             f = discord.File("honda_s.png")
@@ -63,3 +70,4 @@ async def respond_rps(message):
                 ほな、いただきます！
             """)
             await message.channel.send(m, file=f)
+            await play_youtube(voice, "https://youtu.be/28d78XP1TJs")

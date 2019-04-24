@@ -2,6 +2,8 @@ import os
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 
+DISCORD_VOICE_CH_ID = "348823033005211652"
+
 HAND_R_KEYWORDS = [
     "ぐー",
     "グー",
