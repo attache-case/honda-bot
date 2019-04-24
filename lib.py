@@ -41,7 +41,7 @@ async def respond_rps(client, message):
         if r is True:
             # m = "https://youtu.be/LhPJcvJLNEA"
             f = [
-                discord.File("honda_p.png"),
+                # discord.File("honda_p.png"),
                 discord.File("honda_p.gif")
             ]
             m = textwrap.dedent("""\
@@ -55,7 +55,7 @@ async def respond_rps(client, message):
         elif s is True:
             # m = "https://youtu.be/SWNCYpeDTfo"
             f = [
-                discord.File("honda_r.png"),
+                # discord.File("honda_r.png"),
                 discord.File("honda_r.gif")
             ]
             m = textwrap.dedent("""\
@@ -69,7 +69,7 @@ async def respond_rps(client, message):
         if p is True:
             # m = "https://youtu.be/28d78XP1TJs"
             f = [
-                discord.File("honda_s.png"),
+                # discord.File("honda_s.png"),
                 discord.File("honda_s.gif")
             ]
             m = textwrap.dedent("""\
