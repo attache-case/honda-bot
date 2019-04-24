@@ -26,7 +26,7 @@ async def play_youtube(voice, url):
     player = await voice.create_ytdl_player(url)
     player.start()
 
-async def respond_rps(message):
+async def respond_rps(client, message):
     r, p, s = parse_hands(message)
     if [r, p, s].count(True) == 0:
         return

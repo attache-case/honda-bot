@@ -18,6 +18,6 @@ async def on_message(message):
 
     await lib.respond_greeting(message)
 
-    await lib.respond_rps(message)
+    await lib.respond_rps(client, message)
 
 client.run(env.DISCORD_TOKEN)
