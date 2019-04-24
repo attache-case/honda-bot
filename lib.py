@@ -40,34 +40,43 @@ async def respond_rps(client, message):
         voice = await client.join_voice_channel(client.get_channel(DISCORD_VOICE_CH_ID))
         if r is True:
             # m = "https://youtu.be/LhPJcvJLNEA"
-            f = discord.File("honda_p.png")
+            f = [
+                discord.File("honda_p.png"),
+                discord.File("honda_p.gif")
+            ]
             m = textwrap.dedent("""\
                 俺の勝ち！
                 負けは次につながるチャンスです！
                 ネバーギブアップ！
                 ほな、いただきます！
             """)
-            await message.channel.send(m, file=f)
+            await message.channel.send(m, files=f)
             await play_youtube(voice, "https://youtu.be/LhPJcvJLNEA")
         elif s is True:
             # m = "https://youtu.be/SWNCYpeDTfo"
-            f = discord.File("honda_r.png")
+            f = [
+                discord.File("honda_r.png"),
+                discord.File("honda_r.gif")
+            ]
             m = textwrap.dedent("""\
                 俺の勝ち！
                 たかがじゃんけん、そう思ってないですか？
                 それやったら明日も、俺が勝ちますよ
                 ほな、いただきます！
             """)
-            await message.channel.send(m, file=f)
+            await message.channel.send(m, files=f)
             await play_youtube(voice, "https://youtu.be/SWNCYpeDTfo")
         if p is True:
             # m = "https://youtu.be/28d78XP1TJs"
-            f = discord.File("honda_s.png")
+            f = [
+                discord.File("honda_s.png"),
+                discord.File("honda_s.gif")
+            ]
             m = textwrap.dedent("""\
                 俺の勝ち！
                 なんで負けたか、明日まで考えといてください。
                 そしたら何かが見えてくるはずです
                 ほな、いただきます！
             """)
-            await message.channel.send(m, file=f)
+            await message.channel.send(m, files=f)
             await play_youtube(voice, "https://youtu.be/28d78XP1TJs")
