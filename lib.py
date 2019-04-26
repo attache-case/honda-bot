@@ -10,6 +10,12 @@ async def respond_greeting(message):
     if message.content.startswith("おはよう"):
         m = "おはようございます" + message.author.name + "さん！"
         await message.channel.send(m)
+    if message.content.startswith("こんにちは"):
+        m = "ちーっす、" + message.author.name + "さん！"
+        await message.channel.send(m)
+    if message.content.startswith("こんばんは"):
+        m = "こんばんは、" + message.author.name + "さん！"
+        await message.channel.send(m)
 
 def key_parser(message, keyword_list):
     has_keyword = False
@@ -34,13 +40,15 @@ async def respond_rps(client, message):
     if [r, p, s].count(True) == 0:
         return
 
+    m_prefix = message.author.mention + "\n"
+
     # judge rights
     if message.author in rps_done_member_list:
         m = textwrap.dedent("""\
-            {}さん、じゃんけんは1日1回まで！
+            じゃんけんは1日1回まで！
             ほな、また明日！
         """.format(message.author.name))
-        await message.channel.send(m)
+        await message.channel.send(m_prefix + m)
         return
 
     if [r, p, s].count(True) > 1:
@@ -53,8 +61,6 @@ async def respond_rps(client, message):
         rps_done_member_list.append(message.author) # add user to done list when rps is done
 
         rnd = random.random()
-
-        m_prefix = message.author.mention + "\n"
 
         # WIN
 
