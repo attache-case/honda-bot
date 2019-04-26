@@ -55,7 +55,7 @@ async def respond_rps(client, message):
         m = textwrap.dedent("""\
             手を複数同時に出すのは反則やで！
         """)
-        await message.channel.send(m)
+        await message.channel.send(m_prefix + m)
     else:
         assert [r, p, s].count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
         rps_done_member_list.append(message.author) # add user to done list when rps is done
