@@ -8,6 +8,7 @@ active_ch = None
 
 @client.event
 async def on_ready():
+    global active_ch
     print('Logged in as...')
     print('user name: ' + client.user.name)
     print('user id: ' + str(client.user.id))

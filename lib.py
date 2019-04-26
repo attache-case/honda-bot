@@ -50,7 +50,7 @@ async def respond_rps(client, message):
         await message.channel.send(m)
     else:
         assert [r, p, s].count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
-        rps_done_member_list.append(message.author)
+        rps_done_member_list.append(message.author) # add user to done list when rps is done
 
         rnd = random.random()
 
