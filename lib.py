@@ -4,6 +4,8 @@ import env
 import textwrap
 import random
 
+rps_done_member_list = []
+
 async def respond_greeting(message):
     if message.content.startswith("おはよう"):
         m = "おはようございます" + message.author.name + "さん！"
@@ -31,6 +33,16 @@ async def respond_rps(client, message):
     r, p, s = parse_hands(message)
     if [r, p, s].count(True) == 0:
         return
+
+    # judge rights
+    if message.author in rps_done_member_list:
+        m = textwrap.dedent("""\
+            {}さん、じゃんけんは1日1回まで！
+            ほな、また明日！
+        """.format(message.author.name))
+        await message.channel.send(m)
+        return
+
     if [r, p, s].count(True) > 1:
         m = textwrap.dedent("""\
             手を複数同時に出すのは反則やで！
@@ -38,8 +50,11 @@ async def respond_rps(client, message):
         await message.channel.send(m)
     else:
         assert [r, p, s].count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
+        rps_done_member_list.append(message.author)
 
         rnd = random.random()
+
+        m_prefix = message.author.mention + "\n"
 
         # WIN
 
@@ -52,7 +67,7 @@ async def respond_rps(client, message):
                 明日は俺にリベンジさせて。
                 では、どうぞ。
             """)
-            await message.channel.send(m, files=f)
+            await message.channel.send(m_prefix + m, files=f)
             return
 
         # LOSE
@@ -70,7 +85,7 @@ async def respond_rps(client, message):
                 ネバーギブアップ！
                 ほな、いただきます！
             """)
-            await message.channel.send(m, files=f)
+            await message.channel.send(m_prefix + m, files=f)
             # await play_youtube(voice, "https://youtu.be/LhPJcvJLNEA")
         elif s is True:
             # m = "https://youtu.be/SWNCYpeDTfo"
@@ -84,7 +99,7 @@ async def respond_rps(client, message):
                 それやったら明日も、俺が勝ちますよ
                 ほな、いただきます！
             """)
-            await message.channel.send(m, files=f)
+            await message.channel.send(m_prefix + m, files=f)
             # await play_youtube(voice, "https://youtu.be/SWNCYpeDTfo")
         if p is True:
             # m = "https://youtu.be/28d78XP1TJs"
@@ -98,5 +113,5 @@ async def respond_rps(client, message):
                 そしたら何かが見えてくるはずです
                 ほな、いただきます！
             """)
-            await message.channel.send(m, files=f)
+            await message.channel.send(m_prefix + m, files=f)
             # await play_youtube(voice, "https://youtu.be/28d78XP1TJs")
