@@ -3,6 +3,7 @@ import env
 import lib
 
 client = discord.Client()
+game_rps = lib.GameRPS()
 
 active_ch = None
 
@@ -30,6 +31,6 @@ async def on_message(message):
 
     await lib.respond_greeting(message)
 
-    await lib.respond_rps(client, message)
+    await game_rps.process_message(client, message)
 
 client.run(env.DISCORD_TOKEN)
