@@ -13,13 +13,18 @@ HELLO_MESSAGE = textwrap.dedent("""\
     今日の本田ロイド、起動したで！
 """)
 
+EMOJI_R = ":fist:"
+EMOJI_S = ":v:"
+EMOJI_P = ":hand_splayed:"
+
 HAND_R_KEYWORDS = [
     "ぐー",
     "グー",
     "gu",
     "rock",
     "Rock",
-    "ROCK"
+    "ROCK",
+    EMOJI_R
 ]
 HAND_S_KEYWORDS = [
     "ちょき",
@@ -29,7 +34,8 @@ HAND_S_KEYWORDS = [
     "tyoki",
     "scissors",
     "Scissors",
-    "SCISSORS"
+    "SCISSORS",
+    EMOJI_S
 ]
 HAND_P_KEYWORDS = [
     "ぱー",
@@ -37,5 +43,6 @@ HAND_P_KEYWORDS = [
     "pa",
     "paper",
     "Paper",
-    "PAPER"
+    "PAPER",
+    EMOJI_P
 ]
