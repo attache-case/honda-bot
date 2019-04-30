@@ -129,8 +129,8 @@ class GameRPS:
                 f = self.__file_lose_p
                 m = self.__msg_lose_p
 
-        self.__rps_done_member_list.append(player) # add user to done list when rps is done
         await ch.send(m_prefix + m, files=f)
+        self.__rps_done_member_list.append(player) # add user to done list when rps is done
         return
 
     async def process_message(self, client, message):
