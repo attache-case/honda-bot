@@ -155,7 +155,7 @@ class GameRPS:
         else:
             assert hands.count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
 
-            self.__play_rps(ch, player, hands, m_prefix)
+            await self.__play_rps(ch, player, hands, m_prefix)
 
 
 async def respond_greeting(message):
