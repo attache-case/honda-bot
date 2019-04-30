@@ -114,11 +114,11 @@ class GameRPS:
         rnd = random.random()
 
         if rnd < env.WIN_RATE:
-            m_prefix = self.__create_rps_battle_string(player, hands, 'W') + m_prefix
+            m_prefix = m_prefix + self.__create_rps_battle_string(player, hands, 'W')
             f = self.__file_win
             m = self.__msg_win
         else:
-            m_prefix = self.__create_rps_battle_string(player, hands, 'L') + m_prefix
+            m_prefix = m_prefix + self.__create_rps_battle_string(player, hands, 'L')
             if r is True:
                 f = self.__file_lose_r
                 m = self.__msg_lose_r
