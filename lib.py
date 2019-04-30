@@ -109,7 +109,7 @@ class GameRPS:
             return ""
 
 
-    async def __play_rps(self, ch, player, hands, m_prefix=""):
+    def __play_rps(self, ch, player, hands, m_prefix=""):
         r, p, s = hands
         rnd = random.random()
 
