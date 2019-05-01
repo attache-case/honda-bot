@@ -46,20 +46,20 @@ class GameRPS:
         そしたら何かが見えてくるはずです
         ほな、いただきます！
     """)
-    __file_win = [
-        discord.File("honda_win.png")
+    __filenames_win = [
+        "honda_win.png"
     ]
-    __file_lose_r = [
-        # discord.File("honda_p.png"),
-        discord.File("honda_p.gif")
+    __filenames_lose_r = [
+        # "honda_p.png",
+        "honda_p.gif"
     ]
-    __file_lose_s = [
-        # discord.File("honda_r.png"),
-        discord.File("honda_r.gif")
+    __filenames_lose_s = [
+        # "honda_r.png",
+        "honda_r.gif"
     ]
-    __file_lose_p = [
-        # discord.File("honda_s.png"),
-        discord.File("honda_s.gif")
+    __filenames_lose_p = [
+        # "honda_s.png",
+        "honda_s.gif"
     ]
 
     __youtube_lose_r = "https://youtu.be/LhPJcvJLNEA"
@@ -115,18 +115,18 @@ class GameRPS:
 
         if rnd < env.WIN_RATE:
             m_prefix = m_prefix + self.__create_rps_battle_string(player, hands, 'W')
-            f = self.__file_win
+            f = [discord.File(filename) for filename in self.__filenames_win]
             m = self.__msg_win
         else:
             m_prefix = m_prefix + self.__create_rps_battle_string(player, hands, 'L')
             if r is True:
-                f = self.__file_lose_r
+                f = [discord.File(filename) for filename in self.__filenames_lose_r]
                 m = self.__msg_lose_r
             elif s is True:
-                f = self.__file_lose_s
+                f = [discord.File(filename) for filename in self.__filenames_lose_s]
                 m = self.__msg_lose_s
             elif p is True:
-                f = self.__file_lose_p
+                f = [discord.File(filename) for filename in self.__filenames_lose_p]
                 m = self.__msg_lose_p
 
         await ch.send(m_prefix + m, files=f)
