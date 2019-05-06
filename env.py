@@ -24,7 +24,8 @@ HAND_R_KEYWORDS = [
     "rock",
     "Rock",
     "ROCK",
-    EMOJI_R
+    EMOJI_R,
+    "✊"
 ]
 HAND_S_KEYWORDS = [
     "ちょき",
@@ -35,7 +36,8 @@ HAND_S_KEYWORDS = [
     "scissors",
     "Scissors",
     "SCISSORS",
-    EMOJI_S
+    EMOJI_S,
+    "✌"
 ]
 HAND_P_KEYWORDS = [
     "ぱー",
@@ -44,5 +46,6 @@ HAND_P_KEYWORDS = [
     "paper",
     "Paper",
     "PAPER",
-    EMOJI_P
+    EMOJI_P,
+    "🖐"
 ]
