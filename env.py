@@ -32,7 +32,7 @@ HELLO_MESSAGE_BASE = textwrap.dedent("""\
 def get_hello_message():
     _, _, dt_next_refresh = get_dt_now_and_dt_prev_next_refresh()
     s = ""
-    s = s + HELLO_MESSAGE_BASE + "\n"
+    s = s + HELLO_MESSAGE_BASE
     s = s + "（次回のじゃんけん回数リセットは" + dt_next_refresh.strftime('%Y-%m-%d %H:%M:%S') + "）"
     return s
 
