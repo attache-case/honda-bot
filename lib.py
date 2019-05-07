@@ -98,7 +98,7 @@ class GameRPS:
                             return True, None, None
                         else:
                             return False, dt_last_accessed, dt_next_refresh
-                cur.execute('INSERT INTO honda_bot_users (id, name, battle_count_total, battle_count_win, battle_count_lose) VALUES (%s, %s)', (player_id, player_name, 0, 0, 0))
+                cur.execute('INSERT INTO honda_bot_users (id, name, battle_count_total, battle_count_win, battle_count_lose) VALUES (%s, %s, %s, %s, %s)', (player_id, player_name, 0, 0, 0))
                 return True, None, None
 
     def __update_player_access_and_battle_count(self, player, result):
