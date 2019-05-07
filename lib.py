@@ -162,7 +162,7 @@ class GameRPS:
         if battle_result == 'W':
             f = [discord.File(filename) for filename in self.__filenames_win]
             m = self.__msg_win
-        elif battle_result = 'L'
+        elif battle_result == 'L'
             if r is True:
                 f = [discord.File(filename) for filename in self.__filenames_lose_r]
                 m = self.__msg_lose_r
