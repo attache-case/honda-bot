@@ -3,8 +3,11 @@ import env
 
 import textwrap
 import random
+import datetime
 
-# rps_done_member_list = []
+import os
+import psycopg2
+from psycopg2.extras import DictCursor
 
 def key_parser(message, keyword_list):
     has_keyword = False
@@ -69,11 +72,47 @@ class GameRPS:
     def __init__(self):
         pass
 
+    def __get_connection(self):
+        dsn = env.DATABASE_URL
+        return psycopg2.connect(dsn, sslmode='require')
+
     def __parse_hands(self, message):
         r = key_parser(message, env.HAND_R_KEYWORDS)
         p = key_parser(message, env.HAND_P_KEYWORDS)
         s = key_parser(message, env.HAND_S_KEYWORDS)
         return [r, p, s]
+
+    def __check_player_rights(self, player):
+        with self.__get_connection() as conn:
+            conn.autocommit = True
+            with conn.cursor(cursor_factory=DictCursor) as cur:
+                cur.execute('SELECT * FROM honda_bot_users')
+                rows = cur.fetchall()
+                player_id = player.id
+                player_name = player.name
+                dt_now, dt_prev_refresh, dt_next_refresh = env.get_dt_now_and_dt_prev_next_refresh()
+                for row in rows:
+                    if row["id"] == player_id:
+                        dt_last_accessed = row["last_accessed"]
+                        if dt_last_accessed == None or dt_last_accessed < dt_prev_refresh:
+                            return True, None, None
+                        else:
+                            return False, dt_last_accessed, dt_next_refresh
+                cur.execute('INSERT INTO honda_bot_users (id, name, battle_count_total, battle_count_win, battle_count_lose) VALUES (%s, %s)', (player_id, player_name, 0, 0, 0))
+                return True, None, None
+
+    def __update_player_access_and_battle_count(self, player, result):
+        with self.__get_connection() as conn:
+            conn.autocommit = True
+            with conn.cursor(cursor_factory=DictCursor) as cur:
+                player_id = player.id
+                dt_now = datetime.datetime.now()
+                cur.execute('UPDATE honda_bot_users SET last_accessed = %s WHERE id = %s', (dt_now, player_id))
+                cur.execute('UPDATE honda_bot_users SET battle_count_total = battle_count_total + 1 WHERE id = %s', (player_id,))
+                if result == 'W':
+                    cur.execute('UPDATE honda_bot_users SET battle_count_win = battle_count_win + 1 WHERE id = %s', (player_id,))
+                elif result == 'L':
+                    cur.execute('UPDATE honda_bot_users SET battle_count_lose = battle_count_lose + 1 WHERE id = %s', (player_id,))
 
     async def __play_youtube(self, voice, url):
         player = await voice.create_ytdl_player(url)
@@ -114,11 +153,16 @@ class GameRPS:
         rnd = random.random()
 
         if rnd < env.WIN_RATE:
-            m_prefix = m_prefix + self.__create_rps_battle_string(player, hands, 'W')
+            battle_result = 'W'
+        else:
+            battle_result = 'L'
+
+        m_prefix = m_prefix + self.__create_rps_battle_string(player, hands, battle_result)
+
+        if battle_result == 'W':
             f = [discord.File(filename) for filename in self.__filenames_win]
             m = self.__msg_win
-        else:
-            m_prefix = m_prefix + self.__create_rps_battle_string(player, hands, 'L')
+        elif battle_result = 'L'
             if r is True:
                 f = [discord.File(filename) for filename in self.__filenames_lose_r]
                 m = self.__msg_lose_r
@@ -130,7 +174,7 @@ class GameRPS:
                 m = self.__msg_lose_p
 
         await ch.send(m_prefix + m, files=f)
-        self.__rps_done_member_list.append(player) # add user to done list when rps is done
+        self.__update_player_access_and_battle_count(player, battle_result) # update user's last access time when rps is done
         return
 
     async def process_message(self, client, message):
@@ -144,7 +188,8 @@ class GameRPS:
         m_prefix = player.mention + "\n"
 
         # judge rights
-        if player in self.__rps_done_member_list:
+        player_rights, dt_last_accessed, dt_prev_refresh = self.__check_player_rights(player)
+        if player_rights is False:
             m = self.__msg_daily_limit_exceeded
             await ch.send(m_prefix + m)
             return
@@ -153,7 +198,7 @@ class GameRPS:
             m = self.__msg_too_many_hands
             await ch.send(m_prefix + m)
         else:
-            assert hands.count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(r, p, s)
+            assert hands.count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(hands[0], hands[1], hands[2])
 
             await self.__play_rps(ch, player, hands, m_prefix)
 
