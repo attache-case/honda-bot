@@ -9,6 +9,10 @@ import os
 import psycopg2
 from psycopg2.extras import DictCursor
 
+def get_connection():
+    dsn = env.DATABASE_URL
+    return psycopg2.connect(dsn, sslmode='require')
+
 def key_parser(message, keyword_list):
     has_keyword = False
     for key in keyword_list:
@@ -72,10 +76,6 @@ class GameRPS:
     def __init__(self):
         pass
 
-    def __get_connection(self):
-        dsn = env.DATABASE_URL
-        return psycopg2.connect(dsn, sslmode='require')
-
     def __parse_hands(self, message):
         r = key_parser(message, env.HAND_R_KEYWORDS)
         p = key_parser(message, env.HAND_P_KEYWORDS)
@@ -83,7 +83,7 @@ class GameRPS:
         return [r, p, s]
 
     def __check_player_rights(self, player):
-        with self.__get_connection() as conn:
+        with get_connection() as conn:
             conn.autocommit = True
             with conn.cursor(cursor_factory=DictCursor) as cur:
                 cur.execute('SELECT * FROM honda_bot_users')
@@ -102,7 +102,7 @@ class GameRPS:
                 return True, None, None
 
     def __update_player_access_and_battle_count(self, player, result):
-        with self.__get_connection() as conn:
+        with get_connection() as conn:
             conn.autocommit = True
             with conn.cursor(cursor_factory=DictCursor) as cur:
                 player_id = player.id
@@ -201,6 +201,38 @@ class GameRPS:
             assert hands.count(True) == 1, 'assert: [r, p, s].count(True) == 1 ... r:{0}, p:{1}, s:{2}'.format(hands[0], hands[1], hands[2])
 
             await self.__play_rps(ch, player, hands, m_prefix)
+
+
+def get_player_stats(player):
+    with get_connection() as conn:
+        conn.autocommit = True
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            player_id = player.id
+            cur.execute('SELECT * FROM honda_bot_users WHERE id = %s', (player_id,))
+            row = cur.fetchone()
+            player_name = player.name
+            if row is None:
+                return False, -1, -1, -1
+            else:
+                return True, row["battle_count_total"], row["battle_count_win"], row["battle_count_lose"]
+
+
+async def respond_stats(message):
+    if message.content.startswith("!stats"):
+        player = message.author
+        found, ttl, win, lose = get_player_stats(player)
+        if found is True:
+            m = textwrap.dedent(f"""\
+                {player.name}さんの戦績：
+                {win}勝{lose}敗 => 勝率 {(win/ttl):.2%}
+            """)
+            await message.channel.send(m)
+        else:
+            m = textwrap.dedent(f"""\
+                {player.name}さんのデータは存在しないみたいやで！
+                一回じゃんけんしてみようや！
+            """)
+            await message.channel.send(m)
 
 
 async def respond_greeting(message):

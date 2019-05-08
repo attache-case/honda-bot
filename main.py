@@ -31,6 +31,8 @@ async def on_message(message):
 
     await lib.respond_greeting(message)
 
+    await lib.respond_stats(message)
+
     await game_rps.process_message(client, message)
 
 client.run(env.DISCORD_TOKEN)
