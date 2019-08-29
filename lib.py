@@ -210,17 +210,42 @@ def get_player_stats(player):
             player_id = player.id
             cur.execute('SELECT * FROM honda_bot_users WHERE id = %s', (player_id,))
             row = cur.fetchone()
-            player_name = player.name
             if row is None:
-                return False, -1, -1, -1
+                return False, "Player Name Undefined", -1, -1, -1
             else:
-                return True, row["battle_count_total"], row["battle_count_win"], row["battle_count_lose"]
+                player_name = row["Name"]
+                return True, player_name, row["battle_count_total"], row["battle_count_win"], row["battle_count_lose"]
+
+
+def get_player_stats_from_id_given(player_id):
+    with get_connection() as conn:
+        conn.autocommit = True
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute('SELECT * FROM honda_bot_users WHERE id = %s', (player_id,))
+            row = cur.fetchone()
+            if row is None:
+                return False, "Player Name Undefined", -1, -1, -1
+            else:
+                player_name = row["Name"]
+                return True, player_name, row["battle_count_total"], row["battle_count_win"], row["battle_count_lose"]
+
+
+def get_player_ids():
+    with get_connection() as conn:
+        conn.autocommit = True
+        with conn.cursor(cursor_factory=DictCursor) as cur:
+            cur.execute('SELECT player_id FROM honda_bot_users', (player_id,))
+            rows = cur.fetchall()
+            player_ids = []
+            for row in rows:
+                player_ids.append(row["player_id"])
+            return player_ids
 
 
 async def respond_stats(message):
     if message.content.startswith("!stats"):
         player = message.author
-        found, ttl, win, lose = get_player_stats(player)
+        found, player_name, ttl, win, lose = get_player_stats(player)
         if found is True:
             m = textwrap.dedent(f"""\
                 {player.name}さんの戦績：
@@ -231,6 +256,30 @@ async def respond_stats(message):
             m = textwrap.dedent(f"""\
                 {player.name}さんのデータは存在しないみたいやで！
                 一回じゃんけんしてみようや！
+            """)
+            await message.channel.send(m)
+
+
+async def respond_allstats(message):
+    if message.content.startswith("!allstats"):
+        player_ids = get_player_ids()
+        all_stats = []
+        for player_id in player_ids:
+            found, player_name, ttl, win, lose = get_player_stats_from_id_given(player_id)
+            if found is True:
+                win_rate = win/ttl
+                all_stats.append( (player_name, ttl, win, lose, win_rate) )
+        if all_stats:
+            all_stats.sort(key=lambda x: x[5], reverse=True)
+            string_list = []
+            for found, player_name, ttl, win, lose, win_rate in all_stats:
+                string_list.append(f"{player_name}さん：{win}勝{lose}敗 => 勝率 {(win/ttl):.2%}")
+            m = "\n".join(string_list)
+            await message.channel.send(m)
+        else:
+            m = textwrap.dedent(f"""\
+                誰のデータは存在しないみたいやで！
+                みんなじゃんけんしてみようや！
             """)
             await message.channel.send(m)
 
