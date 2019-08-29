@@ -272,7 +272,7 @@ async def respond_allstats(message):
         if all_stats:
             all_stats.sort(key=lambda x: x[4], reverse=True)
             string_list = []
-            for found, player_name, ttl, win, lose, win_rate in all_stats:
+            for player_name, ttl, win, lose, win_rate in all_stats:
                 string_list.append(f"{player_name}さん：{win}勝{lose}敗 => 勝率 {(win/ttl):.2%}")
             m = "\n".join(string_list)
             await message.channel.send(m)
