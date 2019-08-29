@@ -278,7 +278,7 @@ async def respond_allstats(message):
             await message.channel.send(m)
         else:
             m = textwrap.dedent(f"""\
-                誰のデータは存在しないみたいやで！
+                誰のデータも存在しないみたいやで！
                 みんなじゃんけんしてみようや！
             """)
             await message.channel.send(m)
