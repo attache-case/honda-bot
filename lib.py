@@ -270,7 +270,7 @@ async def respond_allstats(message):
                 win_rate = win/ttl
                 all_stats.append( (player_name, ttl, win, lose, win_rate) )
         if all_stats:
-            all_stats.sort(key=lambda x: x[5], reverse=True)
+            all_stats.sort(key=lambda x: x[4], reverse=True)
             string_list = []
             for found, player_name, ttl, win, lose, win_rate in all_stats:
                 string_list.append(f"{player_name}さん：{win}勝{lose}敗 => 勝率 {(win/ttl):.2%}")
