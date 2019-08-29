@@ -234,7 +234,7 @@ def get_player_ids():
     with get_connection() as conn:
         conn.autocommit = True
         with conn.cursor(cursor_factory=DictCursor) as cur:
-            cur.execute('SELECT player_id FROM honda_bot_users')
+            cur.execute('SELECT \"player_id\" FROM honda_bot_users')
             rows = cur.fetchall()
             player_ids = []
             for row in rows:
