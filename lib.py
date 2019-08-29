@@ -213,7 +213,7 @@ def get_player_stats(player):
             if row is None:
                 return False, "Player Name Undefined", -1, -1, -1
             else:
-                player_name = row["Name"]
+                player_name = row["name"]
                 return True, player_name, row["battle_count_total"], row["battle_count_win"], row["battle_count_lose"]
 
 
@@ -226,7 +226,7 @@ def get_player_stats_from_id_given(player_id):
             if row is None:
                 return False, "Player Name Undefined", -1, -1, -1
             else:
-                player_name = row["Name"]
+                player_name = row["name"]
                 return True, player_name, row["battle_count_total"], row["battle_count_win"], row["battle_count_lose"]
 
 
