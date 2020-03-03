@@ -173,8 +173,8 @@ class GameRPS:
                 f = [discord.File(filename) for filename in self.__filenames_lose_p]
                 m = self.__msg_lose_p
 
-        await ch.send(m_prefix + m, files=f)
         self.__update_player_access_and_battle_count(player, battle_result) # update user's last access time when rps is done
+        await ch.send(m_prefix + m, files=f)
         return
 
     async def process_message(self, client, message):
@@ -286,7 +286,7 @@ async def respond_allstats(message):
 
 async def respond_greeting(message):
     if message.content.startswith("おはよう"):
-        m = "おはようございます" + message.author.name + "さん！"
+        m = "おはようございます、" + message.author.name + "さん！"
         await message.channel.send(m)
     if message.content.startswith("こんにちは"):
         m = "ちーっす、" + message.author.name + "さん！"
