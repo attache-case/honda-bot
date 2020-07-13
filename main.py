@@ -20,7 +20,8 @@ async def on_ready():
             if channel.name == env.ACTIVE_CHANNEL_NAME:
                 active_ch = channel
     if active_ch != None:
-        await active_ch.send(env.get_hello_message())
+        pass
+        # await active_ch.send(env.get_hello_message())
 
 @client.event
 async def on_message(message):
